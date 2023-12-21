@@ -1,0 +1,56 @@
+let startTime, currentTime, elapsedTime = 0;
+let isRunning = false;
+
+function startStopwatch() {
+    if (!isRunning) {
+        isRunning = true;
+        startTime = new Date().getTime() - elapsedTime;
+        updateDisplay();
+        setInterval(updateDisplay, 10);
+    }
+}
+
+function stopStopwatch() {
+    if (isRunning) {
+        isRunning = false;
+        elapsedTime = new Date().getTime() - startTime;
+    }
+}
+
+function resetStopwatch() {
+    elapsedTime = 0;
+    if (!isRunning) {
+        updateDisplay();
+    }
+}
+
+function updateDisplay() {
+    if (isRunning) {
+        currentTime = new Date().getTime();
+        elapsedTime = currentTime - startTime;
+    }
+
+    const formattedTime = formatTime(elapsedTime);
+    document.getElementById('display').textContent = formattedTime;
+}
+
+function formatTime(time) {
+    const hours = Math.floor(time / 3600000);
+    const minutes = Math.floor((time % 3600000) / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+    const milliseconds = time % 1000;
+
+    return (
+        pad(hours, 2) +
+        ':' +
+        pad(minutes, 2) +
+        ':' +
+        pad(seconds, 2) +
+        '.' +
+        pad(milliseconds, 3)
+    );
+}
+
+function pad(value, width) {
+    return String(value).padStart(width, '0');
+}
